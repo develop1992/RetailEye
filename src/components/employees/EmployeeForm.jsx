@@ -39,7 +39,7 @@ export default function EmployeeForm({ onSubmit, defaultValues = {} }) {
                 <textarea {...register('address')} className="w-full p-2 border rounded" />
             </div>
 
-            <button type="submit" className="bg-[#f5a944] text-white px-4 py-2 rounded">
+            <button type="submit" className="bg-[#43af52] text-white px-4 py-2 rounded">
                 Save
             </button>
         </form>

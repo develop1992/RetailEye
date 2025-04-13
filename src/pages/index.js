@@ -1,6 +1,10 @@
-export { default as Dashboard } from './Dashboard.jsx';
-export { default as Employees } from './Employees.jsx';
-export { default as Shifts } from './Shifts.jsx';
-export { default as BodyCameras } from './BodyCameras.jsx';
-export { default as Recordings } from './Recordings.jsx';
-export { default as Incidents } from './Incidents.jsx';
+export { default as Login } from './auth/Login.jsx';
+export { default as Logout } from './auth/Logout.jsx';
+export { default as Layout } from './admin/Layout.jsx';
+export { default as Dashboard } from './admin/Dashboard.jsx';
+export { default as Employees } from './admin/Employees.jsx';
+export { default as Shifts } from './admin/Shifts.jsx';
+export { default as BodyCameras } from './admin/BodyCameras.jsx';
+export { default as Recordings } from './admin/Recordings.jsx';
+export { default as Incidents } from './admin/Incidents.jsx';
+export { default as PickupShifts } from './employee/PickupShifts.jsx';

@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "type": "Morning",
+    "start_time": "08:00",
+    "end_time": "16:00",
+    "is_available": "true"
+  },
+  {
+    "id": 2,
+    "type": "Evening",
+    "start_time": "16:00",
+    "end_time": "00:00",
+    "is_available": "false" },
+  {
+    "id": 3,
+    "type": "Night",
+    "start_time": "00:00",
+    "end_time": "08:00",
+    "is_available": "true"
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "213131",
+    "serialNumber": "BC-001",
+    "model": "Axon Flex 2",
+    "manufacturer": "Axon",
+    "isAvailable": true,
+    "isActive": true
+  },
+  {
+    "id": "314242",
+    "serialNumber": "BC-002",
+    "model": "BodyCam X1",
+    "manufacturer": "Reveal Media",
+    "isAvailable": false,
+    "isActive": true
+  },
+  {
+    "id": "312424",
+    "serialNumber": "BC-003",
+    "model": "Wolfcom Vision",
+    "manufacturer": "Wolfcom",
+    "isAvailable": true,
+    "isActive": false
+  }
+]

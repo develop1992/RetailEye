@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IncidentForm, GenericTable } from '../components';
+import { IncidentForm, GenericTable } from '../../components/index.js';
 import {
     useReactTable,
     getCoreRowModel,
@@ -108,7 +108,7 @@ export default function Incidents() {
                         setEditIncident(null);
                         setShowForm(true);
                     }}
-                    className="bg-[#f5a944] text-white px-4 py-2 rounded shadow hover:bg-[#e0912d]"
+                    className="bg-[#43af52] text-white px-4 py-2 rounded shadow hover:bg-[#43af52] cursor-pointer"
                 >
                     + Add Incident
                 </button>

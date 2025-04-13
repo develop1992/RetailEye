@@ -24,13 +24,14 @@ html, body, #root {
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
+.nav-aside {
   font-weight: 500;
   color: #060e9d;
-  text-decoration: inherit;
   font-size: 25px;
 }
-a:hover {
+
+.nav-aside:hover {
   color: #060eff;
+  cursor: pointer;
 }
 

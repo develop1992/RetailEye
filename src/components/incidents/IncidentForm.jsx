@@ -32,7 +32,7 @@ export default function IncidentForm({ onSubmit, defaultValues = {} }) {
                 <label className="block text-sm font-medium">Description</label>
                 <textarea {...register('description')} className="w-full p-2 border rounded" />
             </div>
-            <button type="submit" className="bg-[#f5a944] text-white px-4 py-2 rounded">
+            <button type="submit" className="bg-[#43af52] text-white px-4 py-2 rounded">
                 Save
             </button>
         </form>

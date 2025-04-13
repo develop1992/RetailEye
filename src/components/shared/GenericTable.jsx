@@ -6,7 +6,7 @@ export default function GenericTable({ table }) {
     return (
         <div className="overflow-x-auto bg-white rounded-lg shadow-lg text-gray-800">
             <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-[#4762fe] text-white">
+                <thead className="bg-[#cc3990] text-white">
                 {table.getHeaderGroups().map(headerGroup => (
                     <tr key={headerGroup.id}>
                         {headerGroup.headers.map(header => (

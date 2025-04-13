@@ -27,7 +27,7 @@ export default function ShiftForm({ onSubmit, defaultValues = {} }) {
                     <option value="false">No</option>
                 </select>
             </div>
-            <button type="submit" className="bg-[#f5a944] text-white px-4 py-2 rounded">
+            <button type="submit" className="bg-[#43af52] text-white px-4 py-2 rounded">
                 Save
             </button>
         </form>

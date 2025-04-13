@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BodyCameraForm, GenericTable } from '../components';
+import { BodyCameraForm, GenericTable } from '../../components/index.js';
 import {
     useReactTable,
     getCoreRowModel,
@@ -119,7 +119,7 @@ export default function BodyCameras() {
                 <h1 className="text-3xl font-bold text-[#f5a944]">Body Cameras</h1>
                 <button
                     onClick={() => setShowForm(true)}
-                    className="bg-[#f5a944] text-white px-4 py-2 rounded shadow hover:bg-[#e0912d]"
+                    className="bg-[#43af52] text-white px-4 py-2 rounded shadow hover:bg-[#43af52] cursor-pointer"
                 >
                     + Add Body Camera
                 </button>

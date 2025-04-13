@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShiftForm, GenericTable } from '../components';
+import { ShiftForm, GenericTable } from '../../components/index.js';
 import {
     useReactTable,
     getCoreRowModel,
@@ -68,7 +68,7 @@ export default function Shifts() {
                 <h1 className="text-3xl font-bold text-[#f5a944]">Shifts</h1>
                 <button
                     onClick={() => setShowForm(true)}
-                    className="bg-[#f5a944] text-white px-4 py-2 rounded shadow hover:bg-[#e0912d]"
+                    className="bg-[#43af52] text-white px-4 py-2 rounded shadow hover:bg-[#43af52] cursor-pointer"
                 >
                     + Create Shift
                 </button>
