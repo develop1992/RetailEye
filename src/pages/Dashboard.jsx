@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import ScallopedBadge from "../components/ScallopedBadge.jsx";
+import { ScallopedBadge } from "../components";
 
 const Dashboard = () => {
     const [stats] = useState({
