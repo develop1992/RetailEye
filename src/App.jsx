@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import {
     Login,
     Logout,
@@ -11,7 +11,7 @@ import {
     Incidents,
     PickupShifts
 } from './pages';
-import RequireRole from './components/RequireRole';
+import { RequireRole } from './components';
 
 import './App.css'
 
