@@ -1,10 +1,8 @@
-import {
-    useEmployees,
-    useShifts,
-    useBodyCameras,
-    useRecordings,
-    useIncidents
-} from '../../hooks/useRetaileyeQueries';
+import useBodyCameras from '../../hooks/useBodyCamerasQueries';
+import useEmployees from "../../hooks/useEmployeesQueries";
+import useShifts from "../../hooks/useShiftsQueries";
+import useRecordings from "../../hooks/useRecordingsQueries";
+import useIncidents from "../../hooks/useIncidentsQueries";
 import { ScallopedBadge, LoadingIndicator } from "../../components";
 
 export default function Dashboard() {

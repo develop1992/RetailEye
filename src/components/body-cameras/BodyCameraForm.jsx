@@ -1,7 +1,39 @@
 import { useForm } from 'react-hook-form';
+import { useEffect } from 'react';
 
-export default function BodyCameraForm({ onSubmit, defaultValues = {} }) {
-    const { register, handleSubmit } = useForm({ defaultValues });
+const convertBooleansToStrings = (values = {}) => ({
+    ...values,
+    isAvailable: values.isAvailable?.toString(),
+    isActive: values.isActive?.toString(),
+});
+
+export default function BodyCameraForm({ onSubmit, initialValues = {} }) {
+    const {
+        register,
+        handleSubmit,
+        reset,
+    } = useForm({
+        defaultValues: {
+            serialNumber: '',
+            model: '',
+            manufacturer: '',
+            isAvailable: 'true',
+            isActive: 'true',
+            ...convertBooleansToStrings(initialValues), // override with incoming values
+        },
+    });
+
+    // Reset form when switching between create/edit
+    useEffect(() => {
+        reset({
+            serialNumber: '',
+            model: '',
+            manufacturer: '',
+            isAvailable: 'true',
+            isActive: 'true',
+            ...convertBooleansToStrings(initialValues),
+        });
+    }, [initialValues, reset]);
 
     return (
         <form
@@ -22,10 +54,17 @@ export default function BodyCameraForm({ onSubmit, defaultValues = {} }) {
             </div>
             <div>
                 <label className="block text-sm font-medium">Is Available</label>
-                <select {...register('isAvailable')} className="w-full p-2 border rounded">
+                <select
+                    {...register('isAvailable')}
+                    className="w-full p-2 border rounded bg-gray-100 text-gray-500 cursor-not-allowed"
+                    disabled
+                >
                     <option value="true">Yes</option>
                     <option value="false">No</option>
                 </select>
+                <p className="text-xs italic text-gray-500 mt-1">
+                    Availability is managed when assigned to a shift.
+                </p>
             </div>
             <div>
                 <label className="block text-sm font-medium">Is Active</label>
@@ -39,4 +78,4 @@ export default function BodyCameraForm({ onSubmit, defaultValues = {} }) {
             </button>
         </form>
     );
-}
+};

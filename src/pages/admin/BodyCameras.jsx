@@ -1,64 +1,77 @@
 import React, { useState } from 'react';
-import { BodyCameraForm, GenericTable } from '../../components/index.js';
+import { BodyCameraForm, GenericTable, LoadingIndicator, ErrorMessage, ConfirmDialog } from '../../components';
 import {
     useReactTable,
     getCoreRowModel,
     createColumnHelper,
 } from '@tanstack/react-table';
 import { FaTrash, FaEdit } from 'react-icons/fa';
-
-const initialBodyCameras = [
-    {
-        id: crypto.randomUUID(),
-        serialNumber: 'BC-001',
-        model: 'Axon Flex 2',
-        manufacturer: 'Axon',
-        isAvailable: true,
-        isActive: true,
-    },
-    {
-        id: crypto.randomUUID(),
-        serialNumber: 'BC-002',
-        model: 'BodyCam X1',
-        manufacturer: 'Reveal Media',
-        isAvailable: false,
-        isActive: true,
-    },
-    {
-        id: crypto.randomUUID(),
-        serialNumber: 'BC-003',
-        model: 'Wolfcom Vision',
-        manufacturer: 'Wolfcom',
-        isAvailable: true,
-        isActive: false,
-    },
-];
+import useBodyCameras from '../../hooks/useBodyCamerasQueries';
+import { useUpdateBodyCamera, useDeleteBodyCamera } from "../../hooks/useBodyCamerasMutations";
 
 const columnHelper = createColumnHelper();
 
 export default function BodyCameras() {
-    const [cameras, setCameras] = useState(initialBodyCameras);
+    const { data: cameras = [], isLoading, isError, error } = useBodyCameras();
+    const updateCameraMutation = useUpdateBodyCamera();
+    const deleteCameraMutation = useDeleteBodyCamera();
+
     const [showForm, setShowForm] = useState(false);
+    const [editingCamera, setEditingCamera] = useState(null);
 
-    const handleCreate = (data) => {
-        setCameras(prev => [
-            ...prev,
-            {
+    const [confirmOpen, setConfirmOpen] = useState(false);
+    const [cameraToDelete, setCameraToDelete] = useState(null);
+
+    const handleEdit = (cam) => {
+        setEditingCamera(cam);
+        setShowForm(true);
+    };
+
+    const handleDelete = (camera) => {
+        setCameraToDelete(camera);
+        setConfirmOpen(true);
+    };
+
+    const confirmDelete = () => {
+        if (cameraToDelete) {
+            deleteCameraMutation.mutate(cameraToDelete.id, {
+                onSuccess: () => {
+                    setConfirmOpen(false);
+                    setCameraToDelete(null);
+                },
+                onError: (err) => {
+                    console.error('Delete failed:', err);
+                    alert('Failed to delete body camera.');
+                    setConfirmOpen(false);
+                }
+            });
+        }
+    };
+
+    const handleSubmit = (data) => {
+        if (editingCamera) {
+            const updated = {
+                ...editingCamera,
                 ...data,
-                id: crypto.randomUUID(),
-                isAvailable: data.isAvailable === 'true',
+                isAvailable: data.isAvailable !== undefined
+                    ? data.isAvailable === 'true'
+                    : editingCamera.isAvailable,
                 isActive: data.isActive === 'true',
-            }
-        ]);
-        setShowForm(false);
-    };
+            };
 
-    const handleDelete = (cam) => {
-        setCameras(prev => prev.filter(c => c.id !== cam.id));
-    };
-
-    const handleEdit = (emp) => {
-        console.log('Edit:', emp);
+            updateCameraMutation.mutate(updated, {
+                onSuccess: () => {
+                    setShowForm(false);
+                    setEditingCamera(null);
+                },
+                onError: (error) => {
+                    console.error('Update failed:', error);
+                    alert('Failed to update body camera');
+                },
+            });
+        } else {
+            // TODO: handle create
+        }
     };
 
     const columns = [
@@ -86,24 +99,32 @@ export default function BodyCameras() {
         columnHelper.display({
             id: 'actions',
             header: 'Actions',
-            cell: ({ row }) => (
-                <div className="flex space-x-3">
-                    <button
-                        onClick={() => handleEdit(row.original)}
-                        className="text-blue-600 hover:text-blue-800"
-                        title="Edit"
-                    >
-                        <FaEdit />
-                    </button>
-                    <button
-                        onClick={() => handleDelete(row.original)}
-                        className="text-red-600 hover:text-red-800"
-                        title="Delete"
-                    >
-                        <FaTrash />
-                    </button>
-                </div>
-            )
+            cell: ({ row }) => {
+                const camera = row.original;
+
+                if (!camera.isAvailable) {
+                    return <span className="text-sm text-gray-400 italic">In Use</span>;
+                }
+
+                return (
+                    <div className="flex space-x-3">
+                        <button
+                            onClick={() => handleEdit(camera)}
+                            className="text-blue-600 hover:text-blue-800"
+                            title="Edit"
+                        >
+                            <FaEdit />
+                        </button>
+                        <button
+                            onClick={() => handleDelete(camera)}
+                            className="text-red-600 hover:text-red-800"
+                            title="Delete"
+                        >
+                            <FaTrash />
+                        </button>
+                    </div>
+                );
+            }
         }),
     ];
 
@@ -112,6 +133,18 @@ export default function BodyCameras() {
         columns,
         getCoreRowModel: getCoreRowModel(),
     });
+
+    if (isLoading) return <LoadingIndicator message="Loading body cameras..." />;
+    if (isError) {
+        return (
+            <div className="mt-10">
+                <ErrorMessage
+                    message="Failed to load body cameras."
+                    details={error?.message}
+                />
+            </div>
+        );
+    }
 
     return (
         <div className="text-white">
@@ -134,10 +167,28 @@ export default function BodyCameras() {
                             <h2 className="text-xl font-semibold text-gray-800">Add New Body Camera</h2>
                             <button onClick={() => setShowForm(false)} className="text-gray-500 hover:text-gray-800 text-xl font-bold">&times;</button>
                         </div>
-                        <BodyCameraForm onSubmit={handleCreate} />
+                        <BodyCameraForm
+                            onSubmit={handleSubmit}
+                            initialValues={editingCamera}
+                        />
                     </div>
                 </div>
             )}
+
+            <ConfirmDialog
+                open={confirmOpen}
+                title="Delete Body Camera"
+                message={
+                    cameraToDelete
+                        ? `Are you sure you want to delete camera "${cameraToDelete.serialNumber}"? This action cannot be undone.`
+                        : ''
+                }
+                onConfirm={confirmDelete}
+                onCancel={() => {
+                    setConfirmOpen(false);
+                    setCameraToDelete(null);
+                }}
+            />
         </div>
     );
 }
