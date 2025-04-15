@@ -9,13 +9,13 @@ export default function ConfirmDialog({ open, title, message, onConfirm, onCance
                 <div className="flex justify-end space-x-3">
                     <button
                         onClick={onCancel}
-                        className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 text-sm"
+                        className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 text-sm cursor-pointer"
                     >
                         Cancel
                     </button>
                     <button
                         onClick={onConfirm}
-                        className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700 text-sm"
+                        className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700 text-sm cursor-pointer"
                     >
                         Delete
                     </button>

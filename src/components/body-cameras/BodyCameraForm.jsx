@@ -1,11 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
-
-const convertBooleansToStrings = (values = {}) => ({
-    ...values,
-    isAvailable: values.isAvailable?.toString(),
-    isActive: values.isActive?.toString(),
-});
+import { convertBooleansToStrings } from '../../utils/formUtils';
 
 export default function BodyCameraForm({ onSubmit, initialValues = {} }) {
     const {
@@ -13,26 +8,18 @@ export default function BodyCameraForm({ onSubmit, initialValues = {} }) {
         handleSubmit,
         reset,
     } = useForm({
-        defaultValues: {
-            serialNumber: '',
-            model: '',
-            manufacturer: '',
-            isAvailable: 'true',
-            isActive: 'true',
-            ...convertBooleansToStrings(initialValues), // override with incoming values
-        },
+        defaultValues: convertBooleansToStrings(initialValues, {
+            isAvailable: true,
+            isActive: true,
+        }),
     });
 
     // Reset form when switching between create/edit
     useEffect(() => {
-        reset({
-            serialNumber: '',
-            model: '',
-            manufacturer: '',
-            isAvailable: 'true',
-            isActive: 'true',
-            ...convertBooleansToStrings(initialValues),
-        });
+        reset(convertBooleansToStrings(initialValues, {
+            isAvailable: true,
+            isActive: true,
+        }));
     }, [initialValues, reset]);
 
     return (
@@ -73,7 +60,7 @@ export default function BodyCameraForm({ onSubmit, initialValues = {} }) {
                     <option value="false">No</option>
                 </select>
             </div>
-            <button type="submit" className="bg-[#43af52] text-white px-4 py-2 rounded">
+            <button type="submit" className="bg-[#43af52] text-white px-4 py-2 rounded cursor-pointer">
                 Save
             </button>
         </form>
