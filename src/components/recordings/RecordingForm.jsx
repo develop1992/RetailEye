@@ -13,11 +13,11 @@ export default function RecordingForm({ onSubmit }) {
                 <input
                     {...register('recording_file', { required: true })}
                     type="file"
-                    accept="video/*"
+                    accept="video/*,audio/*"
                     className="w-full p-2 border rounded"
                 />
             </div>
-            <button type="submit" className="bg-[#43af52] text-white px-4 py-2 rounded">
+            <button type="submit" className="bg-[#43af52] text-white px-4 py-2 rounded cursor-pointer">
                 Upload
             </button>
         </form>

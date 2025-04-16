@@ -1,44 +1,102 @@
 import React, { useState } from 'react';
-import { ShiftForm, GenericTable } from '../../components/index.js';
+import { ShiftForm, GenericTable, LoadingIndicator, ErrorMessage, ConfirmDialog } from '../../components/index.js';
 import {
     useReactTable,
     getCoreRowModel,
     createColumnHelper,
 } from '@tanstack/react-table';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-
-const initialShifts = [
-    { id: 1, type: 'Morning', start_time: '08:00', end_time: '16:00', is_available: 'true' },
-    { id: 2, type: 'Evening', start_time: '16:00', end_time: '00:00', is_available: 'false' },
-    { id: 3, type: 'Night', start_time: '00:00', end_time: '08:00', is_available: 'true' },
-];
+import useShifts from '../../hooks/useShiftsQueries';
+import { useCreateShift, useUpdateShift, useDeleteShift } from '../../hooks/useShiftsMutations';
 
 const columnHelper = createColumnHelper();
 
 export default function Shifts() {
-    const [shifts, setShifts] = useState(initialShifts);
+    const { data: shifts = [], isLoading, isError, error } = useShifts();
+    const createShiftMutation = useCreateShift();
+    const updateShiftMutation = useUpdateShift();
+    const deleteShiftMutation = useDeleteShift();
+
+    const [editingShift, setEditingShift] = useState(null);
     const [showForm, setShowForm] = useState(false);
 
-    const handleCreate = (newShift) => {
-        setShifts(prev => [
-            ...prev,
-            { ...newShift, id: prev.length + 1 }
-        ]);
-        setShowForm(false);
+    const [confirmOpen, setConfirmOpen] = useState(false);
+    const [shiftToDelete, setShiftToDelete] = useState(null);
+
+    const handleEdit = (shift) => {
+        setEditingShift(shift);
+        setShowForm(true);
+    };
+
+    const handleSubmit = (data) => {
+        if (editingShift) {
+            const updated = {
+                ...editingShift,
+                ...data,
+                isAvailable: data.isAvailable !== undefined
+                    ? data.isAvailable === 'true'
+                    : editingShift?.isAvailable ?? true,
+            };
+
+            updateShiftMutation.mutate(updated, {
+                onSuccess: () => {
+                    setShowForm(false);
+                    setEditingShift(null);
+                },
+                onError: (err) => {
+                    console.error('Update failed:', err);
+                    alert('Failed to update shift');
+                },
+            });
+        } else {
+            createShiftMutation.mutate(
+                {
+                    ...data,
+                    isAvailable: data.isAvailable === 'true',
+                },
+                {
+                    onSuccess: () => {
+                        setShowForm(false);
+                    },
+                    onError: (err) => {
+                        console.error('Create failed:', err);
+                        alert('Failed to create shift');
+                    },
+                }
+            );
+            setShowForm(false);
+        }
     };
 
     const handleDelete = (shift) => {
-        setShifts(prev => prev.filter(s => s.id !== shift.id));
+        setShiftToDelete(shift);
+        setConfirmOpen(true);
+    };
+
+    const confirmDelete = () => {
+        if (shiftToDelete) {
+            deleteShiftMutation.mutate(shiftToDelete.id, {
+                onSuccess: () => {
+                    setConfirmOpen(false);
+                    setShiftToDelete(null);
+                },
+                onError: (err) => {
+                    console.error('Delete failed:', err);
+                    alert('Failed to delete shift.');
+                    setConfirmOpen(false);
+                },
+            });
+        }
     };
 
     const columns = [
         columnHelper.accessor('type', { header: 'Type' }),
-        columnHelper.accessor('start_time', { header: 'Start Time' }),
-        columnHelper.accessor('end_time', { header: 'End Time' }),
-        columnHelper.accessor('is_available', {
+        columnHelper.accessor('startTime', { header: 'Start Time' }),
+        columnHelper.accessor('endTime', { header: 'End Time' }),
+        columnHelper.accessor('isAvailable', {
             header: 'Available?',
             cell: ({ getValue }) =>
-                getValue() === 'true' ? (
+                getValue() ? (
                     <span className="text-green-600 font-semibold">Yes</span>
                 ) : (
                     <span className="text-red-600 font-semibold">No</span>
@@ -49,10 +107,10 @@ export default function Shifts() {
             header: 'Actions',
             cell: ({ row }) => (
                 <div className="flex space-x-4">
-                    <button onClick={() => console.log('Edit:', row.original)} className="text-blue-600 hover:text-blue-800"><FaEdit /></button>
-                    <button onClick={() => handleDelete(row.original)} className="text-red-600 hover:text-red-800"><FaTrash /></button>
+                    <button onClick={() => handleEdit(row.original)} className="text-blue-600 hover:text-blue-800 cursor-pointer"><FaEdit /></button>
+                    <button onClick={() => handleDelete(row.original)} className="text-red-600 hover:text-red-800 cursor-pointer"><FaTrash /></button>
                 </div>
-            )
+            ),
         }),
     ];
 
@@ -74,19 +132,43 @@ export default function Shifts() {
                 </button>
             </div>
 
-            <GenericTable table={table} />
+            {isLoading && <LoadingIndicator message="Loading shifts..." />}
+            {isError && <ErrorMessage message="Failed to load shifts" details={error?.message} />}
+
+            {!isLoading && !isError && <GenericTable table={table} />}
 
             {showForm && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white p-6 rounded-lg w-full max-w-xl shadow-lg">
                         <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-xl font-semibold text-gray-800">Add New Shift</h2>
-                            <button onClick={() => setShowForm(false)} className="text-gray-500 hover:text-gray-800 text-xl font-bold">&times;</button>
+                            <h2 className="text-xl font-semibold text-gray-800">
+                                {editingShift ? 'Edit Shift' : 'Add New Shift'}
+                            </h2>
+                            <button onClick={() => {
+                                setShowForm(false);
+                                setEditingShift(null);
+                            }} className="text-gray-500 hover:text-gray-800 text-xl font-bold cursor-pointer">&times;</button>
                         </div>
-                        <ShiftForm onSubmit={handleCreate} />
+                        <ShiftForm onSubmit={handleSubmit} initialValues={editingShift} />
                     </div>
                 </div>
             )}
+
+            <ConfirmDialog
+                open={confirmOpen}
+                title="Delete Shift"
+                message={
+                    shiftToDelete
+                        ? `Are you sure you want to delete the "${shiftToDelete.type}" shift?`
+                        : ''
+                }
+                onConfirm={confirmDelete}
+                onCancel={() => {
+                    setConfirmOpen(false);
+                    setShiftToDelete(null);
+                }}
+            />
+
         </div>
     );
-}
+};

@@ -4,7 +4,7 @@
  *
  * @param {object|null|undefined} values - The initial values for the form
  * @param {object} defaults - Field-specific boolean defaults (e.g., { isActive: true })
- * @returns {object} A copy of the object with booleans stringified
+ * @returns {object} A copy of the object with booleans stringifies
  */
 export function convertBooleansToStrings(values, defaults = {}) {
     const safe = values || {};
@@ -18,4 +18,12 @@ export function convertBooleansToStrings(values, defaults = {}) {
     });
 
     return result;
+}
+
+export function formatForDateTimeLocal(datetime) {
+    if (!datetime) return '';
+    const date = new Date(datetime);
+    const tzOffset = date.getTimezoneOffset() * 60000;
+    const localISOTime = new Date(date.getTime() - tzOffset).toISOString();
+    return localISOTime.slice(0, 16); // "YYYY-MM-DDTHH:MM"
 }
