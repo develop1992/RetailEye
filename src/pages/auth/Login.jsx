@@ -50,7 +50,7 @@ export default function Login() {
                                 {...register('username', { required: true })}
                                 type="text"
                                 placeholder="Enter your username"
-                                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:ring-indigo-400"
+                                className="placeholder-red-300 text-black w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:ring-indigo-400"
                             />
                         </div>
                         <div>
@@ -59,7 +59,7 @@ export default function Login() {
                                 {...register('password', { required: true })}
                                 type="password"
                                 placeholder="••••••••"
-                                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:ring-indigo-400"
+                                className="placeholder-red-300 text-black w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:ring-indigo-400"
                             />
                         </div>
                         <button

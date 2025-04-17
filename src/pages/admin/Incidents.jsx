@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { IncidentForm, GenericTable, LoadingIndicator, ErrorMessage, ConfirmDialog } from '../../components';
 import {
     useReactTable,
+    getPaginationRowModel,
     getCoreRowModel,
     createColumnHelper,
 } from '@tanstack/react-table';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import useIncidents from '../../hooks/useIncidentsQueries';
-import { useCreateIncident, useUpdateIncident, useDeleteIncident } from '../../hooks/useIncidentsMutations';
+import { useCreateIncident, useUpdateIncident, useDeleteIncident, useDeleteAllIncidents } from '../../hooks/useIncidentsMutations';
 
 const columnHelper = createColumnHelper();
 
@@ -16,12 +17,18 @@ export default function Incidents() {
     const createIncidentMutation = useCreateIncident();
     const updateIncidentMutation = useUpdateIncident();
     const deleteIncidentMutation = useDeleteIncident();
+    const deleteAllIncidentsMutation = useDeleteAllIncidents();
+
+    const [pageIndex, setPageIndex] = useState(0);
+    const [pageSize, setPageSize] = useState(10); // Show 10 incidents per page
 
     const [showForm, setShowForm] = useState(false);
     const [editIncident, setEditIncident] = useState(null);
 
     const [incidentToDelete, setIncidentToDelete] = useState(null);
     const [confirmOpen, setConfirmOpen] = useState(false);
+
+    const [deleteAllOpen, setDeleteAllOpen] = useState(false);
 
     const handleSubmit = (data) => {
         if (editIncident) {
@@ -72,6 +79,19 @@ export default function Incidents() {
         });
     };
 
+    const handleDeleteAll = () => {
+        deleteAllIncidentsMutation.mutate(undefined, {
+            onSuccess: () => {
+                setDeleteAllOpen(false);
+            },
+            onError: (err) => {
+                console.error('Delete All failed:', err);
+                alert('Failed to delete all incidents.');
+                setDeleteAllOpen(false);
+            }
+        });
+    };
+
     const columns = [
         columnHelper.accessor('occurrenceTime', {
             header: 'Time',
@@ -111,29 +131,76 @@ export default function Incidents() {
         data: incidents,
         columns,
         getCoreRowModel: getCoreRowModel(),
+        getPaginationRowModel: getPaginationRowModel(), // ✅ enables client-side pagination
+        state: {
+            pagination: {
+                pageIndex,
+                pageSize,
+            },
+        },
+        onPaginationChange: updater => {
+            const next = typeof updater === 'function' ? updater({ pageIndex, pageSize }) : updater;
+            setPageIndex(next.pageIndex ?? 0);
+            setPageSize(next.pageSize ?? 10);
+        },
     });
 
     return (
         <div className="text-white">
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex justify-between items-center mb-6 gap-4">
                 <h1 className="text-3xl font-bold text-[#f5a944]">Incidents</h1>
-                <button
-                    onClick={() => {
-                        setEditIncident(null);
-                        setShowForm(true);
-                    }}
-                    className="bg-[#43af52] text-white px-4 py-2 rounded shadow hover:bg-[#43af52] cursor-pointer"
-                >
-                    + Add Incident
-                </button>
+                <div className="flex gap-3">
+                    <button
+                        onClick={() => {
+                            setEditIncident(null);
+                            setShowForm(true);
+                        }}
+                        className="bg-[#43af52] text-white px-4 py-2 rounded shadow hover:bg-[#43af52] cursor-pointer"
+                    >
+                        + Add Incident
+                    </button>
+
+                    <button
+                        onClick={() => setDeleteAllOpen(true)}
+                        className="bg-red-600 text-white px-4 py-2 rounded shadow hover:bg-red-700 cursor-pointer"
+                    >
+                        Delete All
+                    </button>
+                </div>
             </div>
 
             {isLoading ? (
                 <LoadingIndicator message="Loading incidents..." />
             ) : isError ? (
-                <ErrorMessage message="Failed to load incidents" details={error?.message} />
+                <div className="mt-10">
+                    <ErrorMessage message="Failed to load incidents" details={error?.message} />
+                </div>
             ) : (
-                <GenericTable table={table} />
+                <>
+                    <GenericTable table={table} rows={table.getRowModel().rows} />
+
+                    <div className="mt-6 flex justify-between items-center">
+                        <button
+                            className="px-4 py-2 bg-gray-300 text-gray-800 rounded disabled:opacity-50 cursor-pointer"
+                            onClick={() => table.previousPage()}
+                            disabled={!table.getCanPreviousPage()}
+                        >
+                            Previous
+                        </button>
+
+                        <span>
+                            Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+                        </span>
+
+                        <button
+                            className="px-4 py-2 bg-gray-300 text-gray-800 rounded disabled:opacity-50 cursor-pointer"
+                            onClick={() => table.nextPage()}
+                            disabled={!table.getCanNextPage()}
+                        >
+                            Next
+                        </button>
+                    </div>
+                </>
             )}
 
             {showForm && (
@@ -174,6 +241,25 @@ export default function Incidents() {
                     setConfirmOpen(false);
                     setIncidentToDelete(null);
                 }}
+            />
+
+            <ConfirmDialog
+                open={deleteAllOpen}
+                title="Delete All Incidents"
+                message="Are you sure you want to delete ALL incidents? This action cannot be undone."
+                onConfirm={() => {
+                    deleteAllIncidentsMutation.mutate(undefined, {
+                        onSuccess: () => {
+                            setDeleteAllOpen(false);
+                        },
+                        onError: (err) => {
+                            console.error('Delete All failed:', err);
+                            alert('Failed to delete all incidents.');
+                            setDeleteAllOpen(false);
+                        }
+                    });
+                }}
+                onCancel={() => setDeleteAllOpen(false)}
             />
 
         </div>

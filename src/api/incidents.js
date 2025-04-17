@@ -47,3 +47,15 @@ export const deleteIncident = async (id) => {
 
     return true;
 };
+
+export const deleteAllIncidents = async () => {
+    const res = await fetch(`${INCIDENTS_URL}/all`, {
+        method: 'DELETE',
+    });
+
+    if (!res.ok) {
+        throw new Error('Failed to delete all incidents');
+    }
+
+    return true;
+};

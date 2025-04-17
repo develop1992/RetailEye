@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { EmployeeForm, GenericTable, LoadingIndicator, ErrorMessage, ConfirmDialog } from '../../components';
 import {
     useReactTable,
+    getPaginationRowModel,
     getCoreRowModel,
     createColumnHelper,
 } from '@tanstack/react-table';
@@ -16,6 +17,9 @@ export default function Employees() {
     const createEmployeeMutation = useCreateEmployee();
     const updateEmployeeMutation = useUpdateEmployee();
     const deleteEmployeeMutation = useDeleteEmployee();
+
+    const [pageIndex, setPageIndex] = useState(0);
+    const [pageSize, setPageSize] = useState(10);
 
     const [showForm, setShowForm] = useState(false);
     const [editingEmployee, setEditingEmployee] = useState(null);
@@ -100,6 +104,18 @@ export default function Employees() {
         data: employees,
         columns,
         getCoreRowModel: getCoreRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
+        state: {
+            pagination: {
+                pageIndex,
+                pageSize,
+            },
+        },
+        onPaginationChange: updater => {
+            const next = typeof updater === 'function' ? updater({ pageIndex, pageSize }) : updater;
+            setPageIndex(next.pageIndex ?? 0);
+            setPageSize(next.pageSize ?? 10);
+        },
     });
 
     return (
@@ -114,15 +130,42 @@ export default function Employees() {
                 </button>
             </div>
 
-            {isLoading && <LoadingIndicator message="Loading employees..." />}
-            {isError && (
-                <ErrorMessage
-                    message="Failed to load employees."
-                    details={error?.message}
-                />
-            )}
+            {isLoading ? (
+                <LoadingIndicator message="Loading employees..." />
+            ) : isError ? (
+                <div className="mt-10">
+                    <ErrorMessage
+                        message="Failed to load employees."
+                        details={error?.message}
+                    />
+                </div>
+            ) : (
+                <>
+                    <GenericTable table={table} rows={table.getRowModel().rows} />
 
-            {!isLoading && !isError && <GenericTable table={table} />}
+                    <div className="mt-6 flex justify-between items-center">
+                        <button
+                            className="px-4 py-2 bg-gray-300 text-gray-800 rounded disabled:opacity-50 cursor-pointer"
+                            onClick={() => table.previousPage()}
+                            disabled={!table.getCanPreviousPage()}
+                        >
+                            Previous
+                        </button>
+
+                        <span>
+                            Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+                        </span>
+
+                        <button
+                            className="px-4 py-2 bg-gray-300 text-gray-800 rounded disabled:opacity-50 cursor-pointer"
+                            onClick={() => table.nextPage()}
+                            disabled={!table.getCanNextPage()}
+                        >
+                            Next
+                        </button>
+                    </div>
+                </>
+            )}
 
             {/* Modal-style form */}
             {showForm && (

@@ -7,7 +7,7 @@ export default function ErrorMessage({ message = 'Something went wrong.', detail
             <div>
                 <p className="text-left font-semibold">Error</p>
                 <p className="text-sm">{message}</p>
-                {details && <p className="text-xs mt-1 italic opacity-70">{details}</p>}
+                {details && <p className="text-left text-xs mt-1 italic opacity-70">{details}</p>}
             </div>
         </div>
     );

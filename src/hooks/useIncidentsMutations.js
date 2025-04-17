@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createIncident, updateIncident, deleteIncident } from '../api/incidents';
+import { createIncident, updateIncident, deleteIncident, deleteAllIncidents } from '../api/incidents';
 
 export const useCreateIncident = () => {
     const queryClient = useQueryClient();
@@ -30,6 +30,16 @@ export const useDeleteIncident = () => {
         mutationFn: deleteIncident,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['incidents'] });
+        },
+    });
+};
+
+export const useDeleteAllIncidents = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: deleteAllIncidents,
+        onSuccess: () => {
+            queryClient.invalidateQueries(['incidents']);
         },
     });
 };
