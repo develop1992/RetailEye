@@ -27,7 +27,7 @@ export default function Recordings() {
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [recordingToDelete, setRecordingToDelete] = useState(null);
 
-    const handleUpload = (data) => {
+    const handleUpload = async (data) => {
         const file = data.recording_file?.[0];
 
         if (!file) {
@@ -51,14 +51,18 @@ export default function Recordings() {
             endTime: now,
         };
 
-        createRecordingMutation.mutate(payload, {
-            onSuccess: () => {
-                setShowForm(false);
-            },
-            onError: (err) => {
-                console.error('Upload failed:', err);
-                alert('Failed to create recording');
-            },
+        return new Promise((resolve, reject) => {
+            createRecordingMutation.mutate(payload, {
+                onSuccess: () => {
+                    setShowForm(false);
+                    resolve(); // tells the form loading state to stop
+                },
+                onError: (err) => {
+                    console.error('Upload failed:', err);
+                    alert('Failed to create recording');
+                    reject(err); // still stop loader on error
+                },
+            });
         });
     };
 
