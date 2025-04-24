@@ -7,9 +7,9 @@ import {
     createColumnHelper,
 } from '@tanstack/react-table';
 import { FaEye, FaTrash } from 'react-icons/fa';
-import useRecordings from '../../hooks/useRecordingsQueries';
-import { useCreateRecording, useDeleteRecording } from '../../hooks/useRecordingsMutations';
-import { getRecordingStreamUrl } from '../../api/recordings';
+import useRecordings from '@/hooks/useRecordingsQueries';
+import { useCreateRecording, useDeleteRecording } from '@/hooks/useRecordingsMutations.js';
+import { getRecordingStreamUrl } from '@/api/recordings.js';
 
 const columnHelper = createColumnHelper();
 

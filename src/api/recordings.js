@@ -25,19 +25,6 @@ export const createRecording = async (recording) => {
     return res.json();
 };
 
-export const uploadRecording = async (formData) => {
-    const res = await fetch('http://localhost:8080/retaileye/recordings/upload', {
-        method: 'POST',
-        body: formData,
-    });
-
-    if (!res.ok) {
-        throw new Error('Failed to upload recording');
-    }
-
-    return res.json();
-};
-
 export const deleteRecording = async (id) => {
     const res = await fetch(`${RECORDINGS_URL}/${id}`, {
         method: 'DELETE',

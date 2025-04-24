@@ -10,7 +10,7 @@ export default function Login() {
         console.log('Login attempt:', data);
 
         const isValidAdmin = data.username === 'admin' && data.password === 'password';
-        const isValidEmployee = data.username === 'employee' && data.password === 'password';
+        const isValidEmployee = (data.username === 'employee1' || data.username === 'employee2') && data.password === 'password';
 
         if (isValidAdmin) {
             localStorage.setItem(
@@ -21,7 +21,7 @@ export default function Login() {
         } else if (isValidEmployee) {
             localStorage.setItem(
                 'user',
-                JSON.stringify({ username: data.username, role: 'employee' })
+                JSON.stringify({ username: data.username, role: 'employee', id: data.username === 'employee1' ? 'f66f9522-f48d-47f9-969f-2ce9cd48c002' : 'f5743f51-26c4-42af-a71f-22d4faa0220e' })
             );
             navigate('/pick-up-shifts');
         } else {
