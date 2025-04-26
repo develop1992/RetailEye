@@ -36,7 +36,7 @@ export default function PickupShifts() {
     const [loading, setLoading] = useState(false);
 
     const availableShifts = shifts.filter((s) => s.isAvailable);
-    const availableCameras = bodyCameras.filter((c) => c.isAvailable && c.isActive);
+    const availableCameras = bodyCameras.filter((c) => c.isAvailable && c.isActive && c.serialNumber === 'CAMERA-001');
 
     const handleConfirm = async () => {
         if (!selectedShift || !selectedCamera) {

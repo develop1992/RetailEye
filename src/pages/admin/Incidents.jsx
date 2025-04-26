@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IncidentForm, GenericTable, LoadingIndicator, ErrorMessage, ConfirmDialog } from '../../components';
+import { IncidentForm, GenericTable, LoadingIndicator, ErrorMessage, ConfirmDialog } from '@/components';
 import {
     useReactTable,
     getPaginationRowModel,
@@ -7,8 +7,8 @@ import {
     createColumnHelper,
 } from '@tanstack/react-table';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import useIncidents from '../../hooks/useIncidentsQueries';
-import { useCreateIncident, useUpdateIncident, useDeleteIncident, useDeleteAllIncidents } from '../../hooks/useIncidentsMutations';
+import useIncidents from '@/hooks/useIncidentsQueries';
+import { useCreateIncident, useUpdateIncident, useDeleteIncident, useDeleteAllIncidents } from '@/hooks/useIncidentsMutations';
 
 const columnHelper = createColumnHelper();
 
@@ -205,7 +205,7 @@ export default function Incidents() {
 
             {showForm && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-lg w-full max-w-xl shadow-lg">
+                    <div className="bg-white p-6 rounded-lg w-full max-w-xl shadow-lg max-h-[90vh] overflow-auto">
                         <div className="flex justify-between items-center mb-4">
                             <h2 className="text-xl font-semibold text-gray-800">
                                 {editIncident ? 'Edit Incident' : 'Add New Incident'}

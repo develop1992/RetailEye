@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createRecording, deleteRecording } from '../api/recordings';
+import { createRecording, deleteRecording } from '@/api/recordings';
 
 export const useCreateRecording = () => {
     const queryClient = useQueryClient();

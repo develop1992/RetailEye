@@ -12,6 +12,11 @@ html, body, #root {
   text-align: center;
 }
 
+.main-content {
+  max-height: calc(100vh); /* Adjust based on your header/footer sizes */
+  overflow-y: auto;
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -150,4 +155,3 @@ html, body, #root {
     @apply bg-background text-foreground;
   }
 }
-

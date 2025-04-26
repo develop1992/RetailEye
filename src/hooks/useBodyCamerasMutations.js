@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { updateBodyCamera, deleteBodyCamera, createBodyCamera } from '../api/bodyCameras';
+import { updateBodyCamera, deleteBodyCamera, createBodyCamera } from '@/api/bodyCameras';
 
 export const useCreateBodyCamera = () => {
     const queryClient = useQueryClient();

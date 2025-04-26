@@ -1,6 +1,6 @@
 export { default as Login } from './auth/Login.jsx';
 export { default as Logout } from './auth/Logout.jsx';
-export { default as Layout } from './admin/Layout.jsx';
+export { default as Layout } from './Layout.jsx';
 export { default as Dashboard } from './admin/Dashboard.jsx';
 export { default as Employees } from './admin/Employees.jsx';
 export { default as Shifts } from './admin/Shifts.jsx';

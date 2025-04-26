@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { getCurrentUser } from '../../utils/auth.js';
-import logo from '../../assets/logo.png';
+import { getCurrentUser } from '@/utils/auth.js';
+import logo from '@/assets/logo.png';
 
 export default function Layout() {
     const location = useLocation();
@@ -20,7 +20,7 @@ export default function Layout() {
 
     return (
         <div className="flex w-full min-h-screen">
-            <aside className="w-64 bg-[#6e9b85] text-white p-4 flex flex-col h-screen justify-between">
+            <aside className="w-64 bg-[#6e9b85] text-white p-4 flex flex-col h-screen justify-between overflow-auto">
                 {/* Top section: logo + nav */}
                 <div>
                     <Link to={user?.role === 'admin' ? "/" : "/pick-up-shifts"} className="mb-6 flex justify-center nav-aside">
@@ -51,7 +51,7 @@ export default function Layout() {
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 bg-[#0a0aa1] p-6 overflow-auto">
+            <main className="main-content flex-1 bg-[#0a0aa1] p-6 overflow-auto">
                 <Outlet />
             </main>
         </div>

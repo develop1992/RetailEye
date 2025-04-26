@@ -4,7 +4,7 @@ import {
     deleteMyEmployeeShift,
     assignCameraToShift,
     deleteMyEmployeeShiftCamera
-} from '../api/employeeShifts';
+} from '@/api/employeeShifts';
 
 export const useCreateEmployeeShift = () => {
     const queryClient = useQueryClient();

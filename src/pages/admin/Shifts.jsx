@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShiftForm, GenericTable, LoadingIndicator, ErrorMessage, ConfirmDialog } from '../../components/index.js';
+import { ShiftForm, GenericTable, LoadingIndicator, ErrorMessage, ConfirmDialog } from '@/components/index';
 import {
     useReactTable,
     getPaginationRowModel,
@@ -7,8 +7,8 @@ import {
     createColumnHelper,
 } from '@tanstack/react-table';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import useShifts from '../../hooks/useShiftsQueries';
-import { useCreateShift, useUpdateShift, useDeleteShift } from '../../hooks/useShiftsMutations';
+import useShifts from '@/hooks/useShiftsQueries';
+import { useCreateShift, useUpdateShift, useDeleteShift } from '@/hooks/useShiftsMutations';
 
 const columnHelper = createColumnHelper();
 
@@ -185,7 +185,7 @@ export default function Shifts() {
 
             {showForm && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-lg w-full max-w-xl shadow-lg">
+                    <div className="bg-white p-6 rounded-lg w-full max-w-xl shadow-lg max-h-[90vh] overflow-auto">
                         <div className="flex justify-between items-center mb-4">
                             <h2 className="text-xl font-semibold text-gray-800">
                                 {editingShift ? 'Edit Shift' : 'Add New Shift'}

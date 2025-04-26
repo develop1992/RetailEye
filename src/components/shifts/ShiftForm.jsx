@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
-import { convertBooleansToStrings, formatForDateTimeLocal } from '../../utils/formUtils';
+import { convertBooleansToStrings, formatForDateTimeLocal } from '@/utils/formUtils';
 
 const normalizeShiftValues = (values) => {
     const safe = values || {};

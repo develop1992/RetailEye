@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
-import { LoadingIndicator } from '../../components';
+import { LoadingIndicator } from '@/components';
 
 export default function RecordingForm({ onSubmit }) {
     const { register, handleSubmit } = useForm();

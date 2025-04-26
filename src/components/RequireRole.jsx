@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom';
-import { getCurrentUser } from '../utils/auth';
+import { getCurrentUser } from '@/utils/auth';
 
 export default function RequireRole({ role, children }) {
     const user = getCurrentUser();

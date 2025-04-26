@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BodyCameraForm, GenericTable, LoadingIndicator, ErrorMessage, ConfirmDialog } from '../../components';
+import { BodyCameraForm, GenericTable, LoadingIndicator, ErrorMessage, ConfirmDialog } from '@/components';
 import {
     useReactTable,
     getPaginationRowModel,
@@ -7,12 +7,12 @@ import {
     createColumnHelper,
 } from '@tanstack/react-table';
 import { FaTrash, FaEdit } from 'react-icons/fa';
-import useBodyCameras from '../../hooks/useBodyCamerasQueries';
+import useBodyCameras from '@/hooks/useBodyCamerasQueries';
 import {
     useCreateBodyCamera,
     useUpdateBodyCamera,
     useDeleteBodyCamera
-} from "../../hooks/useBodyCamerasMutations";
+} from "@/hooks/useBodyCamerasMutations";
 
 const columnHelper = createColumnHelper();
 
@@ -225,7 +225,7 @@ export default function BodyCameras() {
 
             {showForm && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-lg w-full max-w-xl shadow-lg">
+                    <div className="bg-white p-6 rounded-lg w-full max-w-xl shadow-lg max-h-[90vh] overflow-auto">
                         <div className="flex justify-between items-center mb-4">
                             <h2 className="text-xl font-semibold text-gray-800">
                                 {editingCamera ? 'Edit Body Camera' : 'Add New Body Camera'}

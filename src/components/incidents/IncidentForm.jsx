@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
-import { formatForDateTimeLocal } from '../../utils/formUtils';
+import { formatForDateTimeLocal } from '@/utils/formUtils';
 
 const normalizeIncident = (values) => {
     const safe = values || {};

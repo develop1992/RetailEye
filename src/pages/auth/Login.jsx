@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import retaileye from '../../assets/retaileye.png';
+import retaileye from '@/assets/retaileye.png';
 
 export default function Login() {
     const { register, handleSubmit } = useForm();

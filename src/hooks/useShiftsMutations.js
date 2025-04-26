@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createShift, updateShift, deleteShift } from '../api/shifts';
+import { createShift, updateShift, deleteShift } from '@/api/shifts';
 
 export const useCreateShift = () => {
     const queryClient = useQueryClient();

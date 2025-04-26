@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import {
     fetchMyEmployeeShift,
     fetchMyEmployeeShiftCamera,
-} from '../api/employeeShifts';
+} from '@/api/employeeShifts';
 
 export const useMyEmployeeShift = (userId) =>
     useQuery({

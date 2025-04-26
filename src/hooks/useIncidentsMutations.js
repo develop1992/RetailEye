@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createIncident, updateIncident, deleteIncident, deleteAllIncidents } from '../api/incidents';
+import { createIncident, updateIncident, deleteIncident, deleteAllIncidents } from '@/api/incidents';
 
 export const useCreateIncident = () => {
     const queryClient = useQueryClient();
