@@ -49,6 +49,7 @@ export default function Recordings() {
             fileSize,
             startTime: now,
             endTime: now,
+            isAnalyzed: false
         };
 
         return new Promise((resolve, reject) => {
@@ -101,6 +102,17 @@ export default function Recordings() {
         columnHelper.accessor('endTime', {
             header: 'End Time',
             cell: ({ getValue }) => new Date(getValue()).toLocaleString(),
+        }),
+        columnHelper.accessor('employeeShiftDto.employeeDto.fullName', {
+            header: 'Employee',
+            cell: ({ getValue }) => getValue() || 'N/A', // Default to 'N/A' if no name is available
+        }),
+        columnHelper.accessor('bodyCameraDto', {
+            header: 'Body Camera',
+            cell: ({ getValue }) => {
+                const camera = getValue();
+                return camera ? `${camera.serialNumber} - ${camera.model}` : 'N/A'; // Fallback to 'N/A' if data is missing
+            },
         }),
         columnHelper.display({
             id: 'actions',

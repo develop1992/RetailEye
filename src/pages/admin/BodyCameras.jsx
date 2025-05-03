@@ -138,13 +138,18 @@ export default function BodyCameras() {
                         >
                             <FaEdit />
                         </button>
-                        <button
-                            onClick={() => handleDelete(camera)}
-                            className="text-red-600 hover:text-red-800 cursor-pointer"
-                            title="Delete"
-                        >
-                            <FaTrash />
-                        </button>
+
+                        {
+                            !['CAMERA-001', 'CAMERA-002'].includes(camera.serialNumber)
+                            &&
+                            <button
+                                onClick={() => handleDelete(camera)}
+                                className="text-red-600 hover:text-red-800 cursor-pointer"
+                                title="Delete"
+                            >
+                                <FaTrash />
+                            </button>
+                        }
                     </div>
                 );
             }

@@ -30,7 +30,11 @@ export default function BodyCameraForm({ onSubmit, initialValues = {} }) {
             >
                 <div>
                     <label className="block text-sm font-medium">Serial Number</label>
-                    <input {...register('serialNumber')} className="w-full p-2 border rounded" />
+                    <input
+                        {...register('serialNumber')}
+                        className="w-full p-2 border rounded"
+                        readOnly={!!initialValues?.serialNumber}  // Make the field read-only if it's being edited
+                    />
                 </div>
                 <div>
                     <label className="block text-sm font-medium">Model</label>

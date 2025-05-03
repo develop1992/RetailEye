@@ -94,7 +94,7 @@ export default function Employees() {
             cell: ({ row }) => (
                 <div className="flex space-x-4">
                     <button onClick={() => handleEdit(row.original)} className="text-blue-600 hover:text-blue-800 cursor-pointer"><FaEdit /></button>
-                    {row.original?.role !== 'Manager' && <button onClick={() => handleDelete(row.original)} className="text-red-600 hover:text-red-800 cursor-pointer"><FaTrash /></button> }
+                    {row.original?.role !== 'Manager' && !['f66f9522-f48d-47f9-969f-2ce9cd48c002', 'f5743f51-26c4-42af-a71f-22d4faa0220e'].includes(row.original?.id) && <button onClick={() => handleDelete(row.original)} className="text-red-600 hover:text-red-800 cursor-pointer"><FaTrash /></button> }
                 </div>
             ),
         }),
